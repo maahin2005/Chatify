@@ -11,12 +11,16 @@ function Navbar() {
           </h1>
         </Link>
         <div className="flex gap-3 items-center">
-          <button className="px-5 text-purple-950 hover:bg-purple-100 rounded-md cursor-pointer p-2">
-            Login
-          </button>
-          <button className="px-5 hover:bg-purple-600 bg-purple-700 text-white rounded-md p-2">
-            Start for free
-          </button>
+          <Link href="/login">
+            <button className="px-5 text-purple-950 hover:bg-purple-100 rounded-md cursor-pointer p-2">
+              Login
+            </button>
+          </Link>
+          <Link href="/signup">
+            <button className="px-5 hover:bg-purple-600 bg-purple-700 text-white rounded-md p-2">
+              Start for free
+            </button>
+          </Link>
         </div>
       </div>
     </nav>
