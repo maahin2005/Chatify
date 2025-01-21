@@ -12,6 +12,19 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        chatSection: {
+          bg: {
+            light: "#735DA5",
+            med: "#1f2937",
+            dark: "#0f172a",
+            // dark: "#",
+          },
+          font: {
+            light: "#64748b",
+            med: "",
+            dark: "#",
+          },
+        },
       },
       fontFamily: {
         ubuntu: "Ubuntu",

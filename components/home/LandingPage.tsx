@@ -16,7 +16,7 @@ const LandingPage: React.FC = () => {
             Great software that allows you to chat from any place at any time
             without any interruption.
           </p>
-          <Link href="/letschat">
+          <Link href="/chats">
             <button className=" px-6 py-3 bg-purple-700 hover:bg-purple-600 text-white rounded-lg">
               Start Chatting Now
             </button>
