@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function middleware(request) {
   const url = request.nextUrl.pathname;
   const isAuth = await checkAuth(request);
-  if (!isAuth && url === "/chats") {
+  if (!isAuth && (url === "/chats" || url === "/profile")) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
   if (isAuth && (url === "/login" || url === "/signup")) {
@@ -14,5 +14,10 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/chats/:path*", "/login/:path*", "/signup/:path*"],
+  matcher: [
+    "/chats/:path*",
+    "/profile/:path*",
+    "/login/:path*",
+    "/signup/:path*",
+  ],
 };

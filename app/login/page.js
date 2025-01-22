@@ -6,8 +6,14 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import LoadingIndicators from "@/components/LoadingIndicators";
+import { useToast } from "@/hooks/use-toast";
 
 const Login = () => {
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+
   const [isPasswordVisible, setPasswordVisible] = useState(false);
 
   const [credentials, setCredentials] = useState({
@@ -28,8 +34,27 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await axios.post("/api/users/login", credentials);
 
-    alert(credentials.username + credentials.password);
+      if (res.data.success) {
+        setLoading(false);
+        router.push("/profile");
+        toast({
+          title: "Login Succefully",
+          description: `hey there! Welcome back to Chatify.`,
+        });
+      }
+    } catch (error) {
+      setLoading(false);
+      console.log(error.message);
+      toast({
+        title: "Login Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -44,10 +69,7 @@ const Login = () => {
             </h2>
             <p className="text-sm text-purple-200 mt-1">
               Not a member?{" "}
-              <Link
-                href="/auth/signup"
-                className="text-purple-500 hover:underline"
-              >
+              <Link href="/signup" className="text-purple-500 hover:underline">
                 Sign Up
               </Link>
             </p>
@@ -97,7 +119,7 @@ const Login = () => {
               type="submit"
               className="text-white w-full bg-purple-700 flex justify-center items-center rounded-lg h-10 p-2 py-3"
             >
-              Login
+              {loading ? <LoadingIndicators /> : "Login"}
             </button>
           </form>
           <div className="flex justify-center items-center gap-4 my-8">

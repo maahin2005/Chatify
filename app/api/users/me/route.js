@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { decodeToken } from "@/utils/decodeToken";
 
-export async function GET(req: NextRequest) {
+export async function GET(req) {
   const accessToken = req.cookies.get("token")?.value;
 
   if (!accessToken) {
@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
         username: true,
         firstName: true,
         lastName: true,
+        email: true,
       },
     });
 
@@ -27,7 +28,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
     return NextResponse.json({ success: true, data: user }, { status: 200 });
-  } catch (error: any) {
+  } catch (error) {
     return NextResponse.json(
       { error: error.message, success: false },
       { status: 500 }

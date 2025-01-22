@@ -3,10 +3,10 @@ import React from "react";
 
 interface ChatContactProps {
   data: {
-    img: string;
-    name: string;
-    lastMsg: string;
-    lastTime: string;
+    id: string;
+    firstName: string;
+    lastName: string;
+    username: string;
   };
 
   toggleFunc: Function;
@@ -17,30 +17,24 @@ const SingleChatContact: React.FC<ChatContactProps> = ({
 }: any) => {
   return (
     <div
-      className="flex justify-between w-full h-fit min-h-20 items-center px-5 text-gray-300 border-b border-chatSection-bg-dark hover:bg-chatSection-bg-dark"
-      onClick={toggleFunc}
+      className="flex cursor-pointer justify-between w-full h-fit min-h-20 items-center px-5 text-gray-300 border-b border-chatSection-bg-dark hover:bg-chatSection-bg-dark"
+      onClick={() => toggleFunc(data.id, data.username)}
     >
-      <div className="flex gap-10">
+      <div className="flex gap-10 items-center">
         <div>
           <Image
-            src={data.img}
-            alt={data.name}
+            src={"https://randomuser.me/api/portraits/lego/2.jpg"}
+            alt={data.firstName}
             width={50}
             height={50}
             className="w-10 h-10 rounded-full object-cover"
           />
         </div>
-
-        <div className="">
-          <h1>{data.name}</h1>
-          <p className="text-slate-500 md:text-xs lg:text-sm w-[100px] line-clamp-1 overflow-hidden">
-            {data.lastMsg}
-          </p>
-        </div>
+        <h1 className="text-lg font-spaceGro">
+          {data.firstName} {data.lastName}
+        </h1>
       </div>
-      <div className="justify-self-end">
-        <p className="text-slate-500 md:text-xs lg:text-sm">{data.lastTime}</p>
-      </div>
+      <h1 className="text-sm font-kanit text-left">@{data.username}</h1>
     </div>
   );
 };

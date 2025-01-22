@@ -1,14 +1,30 @@
-import prisma from "@/lib/prisma";
+// src/app/api/messages/route.ts
 import { NextResponse } from "next/server";
+import prisma from "@/lib/db";
 
-export async function POST(request) {
-  const { senderId, receiverId, content } = await request.json();
+export async function GET(req) {
   try {
-    const message = await prisma.message.create({
-      data: { senderId, receiverId, content },
+    const { searchParams } = new URL(req.url);
+    const userId = parseInt(searchParams.get("userId") || "");
+    const recipientId = parseInt(searchParams.get("recipientId") || "");
+
+    if (!userId || !recipientId) {
+      return NextResponse.json({ error: "Missing parameters" }, { status: 400 });
+    }
+
+    const messages = await prisma.message.findMany({
+      where: {
+        OR: [
+          { senderId: userId, receiverId: recipientId },
+          { senderId: recipientId, receiverId: userId },
+        ],
+      },
+      orderBy: { createdAt: "asc" },
     });
-    return NextResponse.json(message);
+
+    return NextResponse.json({ messages });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("Error fetching messages:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

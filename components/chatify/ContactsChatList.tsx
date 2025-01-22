@@ -1,24 +1,46 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { TfiMenuAlt } from "react-icons/tfi";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import { data } from "@/utils/letschat/contactChatList";
 import SingleChatContact from "./SingleChatContact";
 import { useState } from "react";
 import MainChatSection from "./MainChatSection";
 import Link from "next/link";
-
+import axios from "axios";
+import LoadingIndicators from "../LoadingIndicators";
+import { useDispatch } from "react-redux";
+import { addReceiver } from "@/lib/features/receiver/receiverSlice";
 const ContactsChatList: React.FC = () => {
+  const dispatch = useDispatch()
   const [isVisible, setIsVisible] = useState(false);
-
-  const toggleSection = () => {
+  const [users, setUsers] = useState([]);
+  const toggleSection = (userId: string, username: string) => {
+    dispatch(addReceiver({userId,username}))
     setIsVisible(!isVisible);
   };
 
   const hideMainChatSection = () => {
     setIsVisible(!isVisible);
   };
+
+  const getUsers = async () => {
+    if (users.length > 0) {
+      return;
+    }
+    try {
+      const res = await axios.get("/api/users");
+      if (res.data.success) {
+        setUsers(res.data.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   return (
     <div className="w-full min-h-screen bg-chatSection-bg-med flex flex-col">
@@ -40,14 +62,14 @@ const ContactsChatList: React.FC = () => {
         </div>
       </div>
 
-      {/* Scrollable chat section */}
       <div
         className={`${
           isVisible ? "hidden md:block" : "block"
         } flex-1 max-h-[70%] overflow-y-scroll`}
         style={{ scrollbarWidth: "none" }}
       >
-        {data?.map((el): any => (
+        {users?.length === 0 && <LoadingIndicators />}
+        {users?.map((el): any => (
           <SingleChatContact data={el} key={el.id} toggleFunc={toggleSection} />
         ))}
       </div>
@@ -57,7 +79,9 @@ const ContactsChatList: React.FC = () => {
           isVisible ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <MainChatSection hideMainChatFunc={hideMainChatSection} />
+        <MainChatSection
+          hideMainChatFunc={hideMainChatSection}
+        />
       </div>
     </div>
   );

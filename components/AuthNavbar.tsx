@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import React from "react";
+import NotificationBell from './Notifications/NotificationBell';
 
 function AuthNavbar() {
   return (
@@ -11,11 +14,7 @@ function AuthNavbar() {
           </h1>
         </Link>
         <div className="flex gap-3 items-center">
-          <Link href="" className="hidden md:inline-block">
-            <button className="px-5 hover:bg-purple-600 bg-purple-700 text-white rounded-md p-2">
-              Notifications
-            </button>
-          </Link>
+          <NotificationBell/>
         </div>
       </div>
     </nav>
